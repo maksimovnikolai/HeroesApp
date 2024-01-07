@@ -14,6 +14,7 @@
 		ADFC9D8C2B4AF42F00ABA9D3 /* Superhero.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D8B2B4AF42F00ABA9D3 /* Superhero.swift */; };
 		ADFC9D8E2B4AF6DD00ABA9D3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D8D2B4AF6DD00ABA9D3 /* NetworkManager.swift */; };
 		ADFC9D902B4AF7BF00ABA9D3 /* ApiURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D8F2B4AF7BF00ABA9D3 /* ApiURL.swift */; };
+		ADFC9D922B4AFBA800ABA9D3 /* SuperHeroesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D912B4AFBA800ABA9D3 /* SuperHeroesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		ADFC9D8B2B4AF42F00ABA9D3 /* Superhero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Superhero.swift; sourceTree = "<group>"; };
 		ADFC9D8D2B4AF6DD00ABA9D3 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		ADFC9D8F2B4AF7BF00ABA9D3 /* ApiURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiURL.swift; sourceTree = "<group>"; };
+		ADFC9D912B4AFBA800ABA9D3 /* SuperHeroesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperHeroesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		ADFC9D842B4AEB5E00ABA9D3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				ADFC9D912B4AFBA800ABA9D3 /* SuperHeroesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				ADFC9D8E2B4AF6DD00ABA9D3 /* NetworkManager.swift in Sources */,
 				ADFC9D6E2B4AEAC900ABA9D3 /* AppDelegate.swift in Sources */,
 				ADFC9D702B4AEAC900ABA9D3 /* SceneDelegate.swift in Sources */,
+				ADFC9D922B4AFBA800ABA9D3 /* SuperHeroesViewController.swift in Sources */,
 				ADFC9D8C2B4AF42F00ABA9D3 /* Superhero.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
