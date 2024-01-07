@@ -19,6 +19,7 @@ final class NetworkManager {
     
     private init() {}
     
+    // MARK: Fetch Data
     func fetchData(completion: @escaping(Result<[Superhero], NetworkError>) -> Void) {
         guard let url = URL(string: Api.heroesUrl.rawValue) else {
             completion(.failure(.invalidURL))
@@ -39,6 +40,20 @@ final class NetworkManager {
                 }
             } catch {
                 completion(.failure(.decodingError))
+            }
+        }.resume()
+    }
+    
+    // MARK: Fetch Image
+    func fetchImage(from url: String, completion: @escaping (Result<Data, NetworkError>) -> Void) {
+        guard let url = URL(string: url) else { return }
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data else {
+                completion(.failure(.noData))
+                return
+            }
+            DispatchQueue.main.async {
+                completion(.success(data))
             }
         }.resume()
     }
