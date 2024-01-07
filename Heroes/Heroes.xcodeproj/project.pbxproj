@@ -11,6 +11,7 @@
 		ADFC9D702B4AEAC900ABA9D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D6F2B4AEAC900ABA9D3 /* SceneDelegate.swift */; };
 		ADFC9D772B4AEACB00ABA9D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADFC9D762B4AEACB00ABA9D3 /* Assets.xcassets */; };
 		ADFC9D7A2B4AEACB00ABA9D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADFC9D782B4AEACB00ABA9D3 /* LaunchScreen.storyboard */; };
+		ADFC9D8C2B4AF42F00ABA9D3 /* Superhero.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFC9D8B2B4AF42F00ABA9D3 /* Superhero.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		ADFC9D762B4AEACB00ABA9D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADFC9D792B4AEACB00ABA9D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADFC9D7B2B4AEACB00ABA9D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ADFC9D8B2B4AF42F00ABA9D3 /* Superhero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Superhero.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 		ADFC9D6C2B4AEAC900ABA9D3 /* Heroes */ = {
 			isa = PBXGroup;
 			children = (
+				ADFC9D8A2B4AF0B200ABA9D3 /* Secrets */,
 				ADFC9D812B4AEB1D00ABA9D3 /* App */,
 				ADFC9D862B4AEB7100ABA9D3 /* Models */,
 				ADFC9D852B4AEB6B00ABA9D3 /* Views */,
@@ -106,6 +109,7 @@
 		ADFC9D862B4AEB7100ABA9D3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				ADFC9D8B2B4AF42F00ABA9D3 /* Superhero.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -115,6 +119,13 @@
 			children = (
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		ADFC9D8A2B4AF0B200ABA9D3 /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Secrets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +200,7 @@
 			files = (
 				ADFC9D6E2B4AEAC900ABA9D3 /* AppDelegate.swift in Sources */,
 				ADFC9D702B4AEAC900ABA9D3 /* SceneDelegate.swift in Sources */,
+				ADFC9D8C2B4AF42F00ABA9D3 /* Superhero.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
