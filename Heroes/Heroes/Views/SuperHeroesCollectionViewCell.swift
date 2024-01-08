@@ -13,6 +13,8 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.textColor = .red
+        label.font = UIFont(name: "Marker Felt Wide", size: 18)
         return label
     }()
     
@@ -23,7 +25,20 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var activityIndicator = UIActivityIndicatorView()
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = .white
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    
+    private var imageURL: URL? {
+        didSet {
+            imageView.image = nil
+            updateImage()
+        }
+    }
     
     // MARK: Life cycle
     override init(frame: CGRect) {
@@ -38,7 +53,7 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
     // MARK: Public method
     func configure(_ hero: Superhero) {
         titleLabel.text = hero.name
-        fetchImage(from: hero.images.lg)
+        imageURL = URL(string: hero.images.lg)
     }
 }
 
@@ -47,29 +62,41 @@ private extension SuperHeroesCollectionViewCell {
     func commonInit() {
         setupImageViewConstraints()
         setupTitleLabelConstraints()
-        activityIndicator = showSpinner(in: imageView)
+        setupActivityIndicatorConstraints()
     }
     
-    func fetchImage(from url: String) {
-        NetworkManager.shared.fetchImage(from: url) { [weak self] result in
+    func updateImage() {
+        guard let imageURL = imageURL else { return }
+        getImage(from: imageURL) { [weak self] result in
+            guard let self else { return }
             switch result {
-            case .success(let data):
-                self?.imageView.image = UIImage(data: data)
-                self?.activityIndicator.stopAnimating()
+            case .success(let image):
+                if imageURL == self.imageURL {
+                    self.imageView.image = image
+                    self.activityIndicator.stopAnimating()
+                }
             case .failure(let error):
-                print(error.localizedDescription)
+                print(error)
             }
         }
     }
     
-    func showSpinner(in view: UIView) -> UIActivityIndicatorView {
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = .white
-        activityIndicator.startAnimating()
-        activityIndicator.center = view.center
-        activityIndicator.hidesWhenStopped = true
-        view.addSubview(activityIndicator)
-        return activityIndicator
+    func getImage(from url: URL, completion: @escaping(Result<UIImage, Error>) -> Void) {
+        if let cacheImage = ImageCache.shared.object(forKey: url.lastPathComponent as NSString) {
+            completion(.success(cacheImage))
+            return
+        }
+        
+        NetworkManager.shared.fetchImage(from: url) { result in
+            switch result {
+            case .success(let imageData):
+                guard let image = UIImage(data: imageData) else { return }
+                ImageCache.shared.setObject(image, forKey: url.lastPathComponent as NSString)
+                completion(.success(image))
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -92,7 +119,17 @@ private extension SuperHeroesCollectionViewCell {
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+    
+    func setupActivityIndicatorConstraints() {
+        addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
         ])
     }
 }

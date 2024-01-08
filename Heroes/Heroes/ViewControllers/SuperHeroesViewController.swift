@@ -15,7 +15,6 @@ final class SuperHeroesViewController: UIViewController {
     private var superheroes = [Superhero]() {
         didSet {
             collectionView.reloadData()
-            print(superheroes)
         }
     }
     
@@ -29,9 +28,22 @@ final class SuperHeroesViewController: UIViewController {
 // MARK: - Private methods
 private extension SuperHeroesViewController {
     
-     func commonInit() {
-         setupDelegate()
-         setupCollectionViewConstraints()
+    func commonInit() {
+        setupDelegate()
+        setupCollectionViewConstraints()
+        fetchData()
+    }
+    
+    func fetchData() {
+        NetworkManager.shared.fetchData { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let superheroes):
+                self.superheroes = superheroes
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func setupDelegate() {
@@ -42,14 +54,14 @@ private extension SuperHeroesViewController {
     func makeCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
-        collectionView.backgroundColor = .yellow
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .black
         collectionView.register(SuperHeroesCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
         return collectionView
     }
 }
-
 
 // MARK: - UICollectionViewDataSource
 extension SuperHeroesViewController: UICollectionViewDataSource {
@@ -60,8 +72,8 @@ extension SuperHeroesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? SuperHeroesCollectionViewCell else { return UICollectionViewCell() }
-        
-        cell.backgroundColor = .red
+        let superhero = superheroes[indexPath.item]
+        cell.configure(superhero)
         return cell
     }
 }
@@ -88,4 +100,3 @@ extension SuperHeroesViewController {
         ])
     }
 }
-

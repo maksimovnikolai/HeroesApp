@@ -45,8 +45,7 @@ final class NetworkManager {
     }
     
     // MARK: Fetch Image
-    func fetchImage(from url: String, completion: @escaping (Result<Data, NetworkError>) -> Void) {
-        guard let url = URL(string: url) else { return }
+    func fetchImage(from url: URL, completion: @escaping (Result<Data, NetworkError>) -> Void) {
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data else {
                 completion(.failure(.noData))
