@@ -12,15 +12,14 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
     // MARK: Private properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "title"
         label.textAlignment = .center
         return label
     }()
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .cyan
-        
+        imageView.layer.cornerRadius = 15
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -33,13 +32,30 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: Public method
+    func configure(_ hero: Superhero) {
+        titleLabel.text = hero.name
+        fetchImage(from: hero.images.lg)
+    }
 }
 
 // MARK: - Private methods
-extension SuperHeroesCollectionViewCell {
-    private func commonInit() {
+private extension SuperHeroesCollectionViewCell {
+    func commonInit() {
         setupImageViewConstraints()
         setupTitleLabelConstraints()
+    }
+    
+    func fetchImage(from url: String) {
+        NetworkManager.shared.fetchImage(from: url) { result in
+            switch result {
+            case .success(let data):
+                self.imageView.image = UIImage(data: data)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
