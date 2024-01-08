@@ -23,6 +23,8 @@ final class SuperHeroesCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    private lazy var activityIndicator = UIActivityIndicatorView()
+    
     // MARK: Life cycle
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -45,17 +47,29 @@ private extension SuperHeroesCollectionViewCell {
     func commonInit() {
         setupImageViewConstraints()
         setupTitleLabelConstraints()
+        activityIndicator = showSpinner(in: imageView)
     }
     
     func fetchImage(from url: String) {
-        NetworkManager.shared.fetchImage(from: url) { result in
+        NetworkManager.shared.fetchImage(from: url) { [weak self] result in
             switch result {
             case .success(let data):
-                self.imageView.image = UIImage(data: data)
+                self?.imageView.image = UIImage(data: data)
+                self?.activityIndicator.stopAnimating()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func showSpinner(in view: UIView) -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = .white
+        activityIndicator.startAnimating()
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+        return activityIndicator
     }
 }
 
