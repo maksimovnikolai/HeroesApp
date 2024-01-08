@@ -29,9 +29,24 @@ final class SuperHeroesViewController: UIViewController {
 private extension SuperHeroesViewController {
     
     func commonInit() {
+        configureNavigationBar()
         setupDelegate()
         setupCollectionViewConstraints()
         fetchData()
+    }
+    
+    func configureNavigationBar() {
+        title = "FIND YOUR HERO"
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barStyle = .black
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.titleTextAttributes = [
+            .font: UIFont(name: "Chalkduster", size: 24) ?? "",
+            .foregroundColor: UIColor.red
+        ]
+        navBarAppearance.backgroundColor = .black
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
     
     func fetchData() {
