@@ -33,9 +33,19 @@ final class SuperHeroDetailsViewController: UIViewController {
         return button
     }()
     
+    private lazy var segmentedControl: UISegmentedControl = {
+        let items = ["Biography", "Appearance", "Powerstats"]
+        let sc = UISegmentedControl(items: items)
+        sc.backgroundColor = .red
+        sc.selectedSegmentTintColor = .yellow
+        sc.addTarget(self, action: #selector(segmentChange), for: .valueChanged)
+        return sc
+    }()
+    
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+//        print(superhero)
         commonInit()
     }
 }
@@ -47,6 +57,7 @@ private extension SuperHeroDetailsViewController {
         view.backgroundColor = .black
         setupImageViewConstraints()
         setupBackButtonConstraints()
+        setupSegmentedControlConstraints()
         getImageFromCache(superhero.images.lg)
         setupNavigationBar()
     }
@@ -59,6 +70,18 @@ private extension SuperHeroDetailsViewController {
     @objc
     func closeVC() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    func segmentChange(_ segmentedControl: UISegmentedControl) {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            print("1")
+        case 1:
+            print("2")
+        default:
+            print("3")
+        }
     }
     
     func getImageFromCache(_ url: String) {
@@ -92,6 +115,16 @@ private extension SuperHeroDetailsViewController {
             backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
+    }
+    
+    func setupSegmentedControlConstraints() {
+        view.addSubview(segmentedControl)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            segmentedControl.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
 }
