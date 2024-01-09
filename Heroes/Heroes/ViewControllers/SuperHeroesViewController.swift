@@ -94,7 +94,20 @@ extension SuperHeroesViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
+extension SuperHeroesViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let superhero = superheroes[indexPath.item]
+        let detailVC = SuperHeroDetailsViewController()
+        detailVC.superhero = superhero
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
 extension SuperHeroesViewController: UICollectionViewDelegateFlowLayout {
+    
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.frame.width/2 - 16, height: 260)
