@@ -20,6 +20,19 @@ final class SuperHeroDetailsViewController: UIViewController {
         return imageView
     }()
     
+    private lazy var backButton: UIButton = {
+       let button = UIButton()
+        button.configuration = .filled()
+        button.configuration?.title = "RETURN"
+        button.configuration?.attributedTitle?.font = UIFont(name: "Marker Felt Wide", size: 20)
+        button.configuration?.baseForegroundColor = .red
+        button.configuration?.baseBackgroundColor = .clear
+        button.configuration?.image = UIImage(systemName: "arrowshape.left.fill")
+        button.configuration?.imagePadding = 10
+        button.addTarget(self, action: #selector(closeVC), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +46,7 @@ private extension SuperHeroDetailsViewController {
     func commonInit() {
         view.backgroundColor = .black
         setupImageViewConstraints()
+        setupBackButtonConstraints()
         getImageFromCache(superhero.images.lg)
         setupNavigationBar()
     }
@@ -40,6 +54,11 @@ private extension SuperHeroDetailsViewController {
     func setupNavigationBar() {
         navigationItem.title = superhero.name
         navigationItem.hidesBackButton = true
+    }
+    
+    @objc
+    func closeVC() {
+        navigationController?.popViewController(animated: true)
     }
     
     func getImageFromCache(_ url: String) {
@@ -63,6 +82,16 @@ private extension SuperHeroDetailsViewController {
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 250),
             imageView.heightAnchor.constraint(equalToConstant: 300),
+        ])
+    }
+    
+    func setupBackButtonConstraints() {
+        view.addSubview(backButton)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
 }
