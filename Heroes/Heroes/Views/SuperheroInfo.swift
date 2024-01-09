@@ -11,10 +11,11 @@ final class SuperheroInfo {
     
     // Public properties
     lazy var biographyStackView = UIStackView.getStackView()
+    lazy var appearanceStackView = UIStackView.getStackView()
     
     // Private properties
     private var superHero: Superhero
-
+    
     // Init
     init(superhero: Superhero) {
         self.superHero = superhero
@@ -24,11 +25,22 @@ final class SuperheroInfo {
 
 // MARK: Private methods
 private extension SuperheroInfo {
-
+    
     func configureBiographyStackView() {
         let fullNameLabel: UILabel = .getLabel(title: "Full name: \(superHero.biography.fullName)")
         let alterEgoLabel: UILabel = .getLabel(title: "Alter Ego: \(superHero.biography.alterEgos)")
         let placeOfBirthLabel: UILabel = .getLabel(title: "Place of birth: \(superHero.biography.placeOfBirth)")
         [fullNameLabel, alterEgoLabel, placeOfBirthLabel].forEach { biographyStackView.addArrangedSubview($0) }
+    }
+    
+    func configureAppearanceStackView() {
+        let race: UILabel = .getLabel(title: "Race: \(superHero.appearance.race ?? "")")
+        let height: UILabel = .getLabel(title: "Height: \(superHero.appearance.height)")
+        let weight: UILabel = .getLabel(title: "Weight: \(superHero.appearance.weight)")
+        let eyeColor: UILabel = .getLabel(title: "Eye color: \(superHero.appearance.eyeColor)")
+        let hairColor: UILabel = .getLabel(title: "Hair color: \(superHero.appearance.hairColor)")
+        [race, height, weight, eyeColor, hairColor].forEach {
+            appearanceStackView.addArrangedSubview($0)
+        }
     }
 }
