@@ -21,4 +21,14 @@ extension UIButton {
         button.addTarget(nil, action: action, for: .touchUpInside)
         return button
     }
+    
+    static func getScrollButton(with action: Selector) -> UIButton {
+        let button = UIButton()
+         button.configuration = .filled()
+         button.configuration?.title = "UP"
+         button.configuration?.image = UIImage(systemName: "chevron.up")
+         button.configuration?.imagePlacement = .top
+         button.addTarget(nil, action: action, for: .touchUpInside)
+         return button
+    }
 }
