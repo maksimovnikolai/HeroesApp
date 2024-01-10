@@ -10,28 +10,9 @@ import UIKit
 final class SuperHeroesCollectionViewCell: UICollectionViewCell {
     
     // MARK: Private properties
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .red
-        label.font = UIFont(name: "Marker Felt Wide", size: 18)
-        return label
-    }()
-    
-    private lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 15
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = .white
-        activityIndicator.startAnimating()
-        activityIndicator.hidesWhenStopped = true
-        return activityIndicator
-    }()
+    private lazy var titleLabel: UILabel = .getLabel(size: 18, textColor: .red)
+    private lazy var imageView: UIImageView = .getImageView()
+    private lazy var activityIndicator = makeActivityIndicator()
     
     private var imageURL: URL? {
         didSet {
@@ -97,6 +78,18 @@ private extension SuperHeroesCollectionViewCell {
                 print(error.localizedDescription)
             }
         }
+    }
+}
+
+// MARK: - Create UI element
+private extension SuperHeroesCollectionViewCell {
+    
+    func makeActivityIndicator() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = .white
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
     }
 }
 
