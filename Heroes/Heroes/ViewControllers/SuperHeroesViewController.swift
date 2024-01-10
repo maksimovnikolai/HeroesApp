@@ -11,11 +11,21 @@ final class SuperHeroesViewController: UIViewController {
     
     // MARK: Private properties
     private lazy var collectionView = makeCollectionView()
+    private lazy var searchController = UISearchController(searchResultsController: nil)
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
     
     private var superheroes = [Superhero]() {
         didSet {
             collectionView.reloadData()
         }
+    }
+    
+    private var filteredHeroes = [Superhero]()
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
     }
     
     // MARK: Life cycle
@@ -29,7 +39,10 @@ final class SuperHeroesViewController: UIViewController {
 private extension SuperHeroesViewController {
     
     func commonInit() {
+        view.backgroundColor = .white
+        setupSearchController()
         configureNavigationBar()
+        
         setupDelegate()
         setupCollectionViewConstraints()
         fetchData()
@@ -37,14 +50,14 @@ private extension SuperHeroesViewController {
     
     func configureNavigationBar() {
         title = "FIND YOUR HERO"
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.backgroundColor = .black
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.titleTextAttributes = [
             .font: UIFont(name: "Chalkduster", size: 24) ?? "",
             .foregroundColor: UIColor.red
         ]
         navBarAppearance.backgroundColor = .black
+    
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
@@ -78,16 +91,51 @@ private extension SuperHeroesViewController {
     }
 }
 
+extension SuperHeroesViewController: UISearchResultsUpdating {
+    
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        UITextField.appearance(
+            whenContainedInInstancesOf:
+                [UISearchBar.self]).defaultTextAttributes = [.foregroundColor: UIColor.white]
+        UIBarButtonItem.appearance(
+            whenContainedInInstancesOf:
+                [UISearchBar.self]).tintColor = UIColor.red
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Search", attributes: [.foregroundColor: UIColor.gray]
+        )
+        searchController.searchBar.searchTextField.leftView?.tintColor = .gray
+
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        filteredHeroes = superheroes.filter({ superhero in
+            return superhero.name.lowercased().contains(searchText.lowercased())
+        })
+        
+        collectionView.reloadData()
+    }
+}
+
 // MARK: - UICollectionViewDataSource
 extension SuperHeroesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        superheroes.count
+        return isFiltering ? filteredHeroes.count : superheroes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? SuperHeroesCollectionViewCell else { return UICollectionViewCell() }
-        let superhero = superheroes[indexPath.item]
+        
+        let superhero = !isFiltering ? superheroes[indexPath.item] : filteredHeroes[indexPath.item]
+        
         cell.configure(superhero)
         return cell
     }
@@ -97,7 +145,7 @@ extension SuperHeroesViewController: UICollectionViewDataSource {
 extension SuperHeroesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let superhero = superheroes[indexPath.item]
+        let superhero = !isFiltering ? superheroes[indexPath.item] : filteredHeroes[indexPath.item]
         let detailVC = SuperHeroDetailsViewController()
         detailVC.superhero = superhero
         navigationController?.pushViewController(detailVC, animated: true)

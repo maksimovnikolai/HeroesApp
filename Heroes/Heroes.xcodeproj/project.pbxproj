@@ -80,7 +80,6 @@
 				ADFC9D8A2B4AF0B200ABA9D3 /* Secrets */,
 				ADFC9D812B4AEB1D00ABA9D3 /* App */,
 				ADFC9D862B4AEB7100ABA9D3 /* Models */,
-				ADFC9D852B4AEB6B00ABA9D3 /* Views */,
 				ADFC9D842B4AEB5E00ABA9D3 /* ViewControllers */,
 				ADFC9D872B4AEB8900ABA9D3 /* Services */,
 				ADFC9D822B4AEB3100ABA9D3 /* Resources */,
@@ -118,6 +117,7 @@
 		ADFC9D842B4AEB5E00ABA9D3 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				ADFC9D852B4AEB6B00ABA9D3 /* Views */,
 				ADFC9D912B4AFBA800ABA9D3 /* SuperHeroesViewController.swift */,
 				ADFC9D9A2B4D908200ABA9D3 /* SuperHeroDetailsViewController.swift */,
 			);
