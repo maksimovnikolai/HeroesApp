@@ -13,39 +13,14 @@ final class SuperHeroDetailsViewController: UIViewController {
     var superhero: Superhero!
     
     // MARK: Private properties
-    private lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 15
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    private lazy var backButton: UIButton = {
-       let button = UIButton()
-        button.configuration = .filled()
-        button.configuration?.title = "RETURN"
-        button.configuration?.attributedTitle?.font = UIFont(name: "Marker Felt Wide", size: 20)
-        button.configuration?.baseForegroundColor = .red
-        button.configuration?.baseBackgroundColor = .clear
-        button.configuration?.image = UIImage(systemName: "arrowshape.left.fill")
-        button.configuration?.imagePadding = 10
-        button.addTarget(self, action: #selector(closeVC), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var segmentedControl: UISegmentedControl = {
-        let items = ["Biography", "Appearance", "Powerstats"]
-        let sc = UISegmentedControl(items: items)
-        sc.backgroundColor = .red
-        sc.selectedSegmentTintColor = .yellow
-        sc.addTarget(self, action: #selector(segmentChange), for: .valueChanged)
-        return sc
-    }()
+    private lazy var imageView: UIImageView = .getImageView()
+    private lazy var backButton: UIButton = .getButton(with: #selector(closeVC))
+    private lazy var segmentedControl: UISegmentedControl = makeSegmentedControl()
+    private lazy var superheroInfo = SuperheroInfo(superhero: superhero)
     
     // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print(superhero)
         commonInit()
     }
 }
@@ -55,11 +30,16 @@ private extension SuperHeroDetailsViewController {
     
     func commonInit() {
         view.backgroundColor = .black
+        setupNavigationBar()
         setupImageViewConstraints()
         setupBackButtonConstraints()
         setupSegmentedControlConstraints()
+        setupStackViewConstraint(
+            superheroInfo.biographyStackView,
+            superheroInfo.appearanceStackView,
+            superheroInfo.powerStatsStackView
+        )
         getImageFromCache(superhero.images.lg)
-        setupNavigationBar()
     }
     
     func setupNavigationBar() {
@@ -76,12 +56,20 @@ private extension SuperHeroDetailsViewController {
     func segmentChange(_ segmentedControl: UISegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            print("1")
+            showStackView(superheroInfo.biographyStackView)
         case 1:
-            print("2")
+            showStackView(superheroInfo.appearanceStackView)
+            
         default:
-            print("3")
+            showStackView(superheroInfo.powerStatsStackView)
         }
+    }
+    
+    func showStackView(_ stackView: UIStackView) {
+        [superheroInfo.powerStatsStackView,
+         superheroInfo.appearanceStackView,
+         superheroInfo.biographyStackView].forEach { $0.isHidden = true }
+        stackView.isHidden = false
     }
     
     func getImageFromCache(_ url: String) {
@@ -92,6 +80,18 @@ private extension SuperHeroDetailsViewController {
                 self.imageView.image = image
             }
         }
+    }
+}
+
+// MARK: - Create UI element
+private extension SuperHeroDetailsViewController {
+    func makeSegmentedControl() -> UISegmentedControl {
+        let items = ["Biography", "Appearance", "Powerstats"]
+        let sc = UISegmentedControl(items: items)
+        sc.backgroundColor = .red
+        sc.selectedSegmentTintColor = .yellow
+        sc.addTarget(self, action: #selector(segmentChange), for: .valueChanged)
+        return sc
     }
 }
 
@@ -126,5 +126,18 @@ private extension SuperHeroDetailsViewController {
             segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
+    }
+    
+    func setupStackViewConstraint(_ superheroStack: UIView...) {
+        superheroStack.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+            $0.isHidden = true
+            NSLayoutConstraint.activate([
+                $0.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20),
+                $0.leadingAnchor.constraint(equalTo: segmentedControl.leadingAnchor),
+                $0.trailingAnchor.constraint(equalTo: segmentedControl.trailingAnchor),
+            ])
+        }
     }
 }

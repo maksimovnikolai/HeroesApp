@@ -107,8 +107,6 @@ extension SuperHeroesViewController: UICollectionViewDelegate {
 // MARK: - UICollectionViewDelegate
 extension SuperHeroesViewController: UICollectionViewDelegateFlowLayout {
     
-
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.frame.width/2 - 16, height: 260)
     }

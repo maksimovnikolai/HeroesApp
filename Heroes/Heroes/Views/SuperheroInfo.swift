@@ -33,8 +33,11 @@ private extension SuperheroInfo {
     func configureBiographyStackView() {
         let fullNameLabel: UILabel = .getLabel(title: "Full name: \(superHero.biography.fullName)")
         let alterEgoLabel: UILabel = .getLabel(title: "Alter Ego: \(superHero.biography.alterEgos)")
+        let aliases: UILabel = .getLabel(title: "Aliases: \(superHero.biography.aliases.joined(separator: ", "))")
         let placeOfBirthLabel: UILabel = .getLabel(title: "Place of birth: \(superHero.biography.placeOfBirth)")
-        [fullNameLabel, alterEgoLabel, placeOfBirthLabel].forEach { biographyStackView.addArrangedSubview($0) }
+        let firstAppearance: UILabel = .getLabel(title: "First Appearance: \(superHero.biography.firstAppearance)")
+        let publisher: UILabel = .getLabel(title: "Publisher: \(superHero.biography.publisher ?? "")")
+        [fullNameLabel, alterEgoLabel, aliases, placeOfBirthLabel, firstAppearance, publisher].forEach { biographyStackView.addArrangedSubview($0) }
     }
     
     // MARK: Appearance Stack View
