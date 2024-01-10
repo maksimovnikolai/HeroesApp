@@ -13,6 +13,7 @@ extension UIStackView {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 8
+        stackView.alignment = .center
         return stackView
     }
 }
