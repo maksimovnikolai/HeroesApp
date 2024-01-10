@@ -12,6 +12,8 @@ final class SuperHeroesViewController: UIViewController {
     // MARK: Private properties
     private lazy var collectionView = makeCollectionView()
     private lazy var searchController = UISearchController(searchResultsController: nil)
+    private lazy var scrollButton: UIButton = .getScrollButton(with: #selector(scrollContent))
+    
     private var searchBarIsEmpty: Bool {
         guard let text = searchController.searchBar.text else { return false }
         return text.isEmpty
@@ -33,6 +35,12 @@ final class SuperHeroesViewController: UIViewController {
         super.viewDidLoad()
         commonInit()
     }
+    
+    override func viewDidLayoutSubviews() {
+        scrollButton.layer.cornerRadius = scrollButton.frame.width / 2
+        scrollButton.clipsToBounds = true
+        scrollButton.alpha = 0.7
+    }
 }
 
 // MARK: - Private methods
@@ -42,9 +50,9 @@ private extension SuperHeroesViewController {
         view.backgroundColor = .white
         setupSearchController()
         configureNavigationBar()
-        
         setupDelegate()
         setupCollectionViewConstraints()
+        setupScrolButton()
         fetchData()
     }
     
@@ -89,22 +97,34 @@ private extension SuperHeroesViewController {
         
         return collectionView
     }
+    
+    @objc
+    func scrollContent() {
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
 }
 
+// MARK: - UISearchResultsUpdating
 extension SuperHeroesViewController: UISearchResultsUpdating {
     
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        UITextField.appearance(
-            whenContainedInInstancesOf:
+        
+        // цвет вводимого текста в searchBar
+        UITextField.appearance(whenContainedInInstancesOf:
                 [UISearchBar.self]).defaultTextAttributes = [.foregroundColor: UIColor.white]
-        UIBarButtonItem.appearance(
-            whenContainedInInstancesOf:
-                [UISearchBar.self]).tintColor = UIColor.red
+        
+        // цвет кнопки "Cancel" справа от searchBar'а
+        UIBarButtonItem.appearance(whenContainedInInstancesOf:
+                [UISearchBar.self]).tintColor = UIColor.gray
+        
+        // цвет placeholder-текста в searchBar'e
         searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
             string: "Search", attributes: [.foregroundColor: UIColor.gray]
         )
+        
+        // цвет значка поиска (лупы) в searchBar'e
         searchController.searchBar.searchTextField.leftView?.tintColor = .gray
 
         navigationItem.searchController = searchController
@@ -171,6 +191,17 @@ extension SuperHeroesViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+    }
+    
+    private func setupScrolButton() {
+        view.addSubview(scrollButton)
+        scrollButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+            scrollButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            scrollButton.widthAnchor.constraint(equalToConstant: 50),
+            scrollButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }
