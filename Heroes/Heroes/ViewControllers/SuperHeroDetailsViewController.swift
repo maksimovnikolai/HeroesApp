@@ -8,15 +8,23 @@
 import UIKit
 
 final class SuperHeroDetailsViewController: UIViewController {
-    
-    // MARK: Public properties
-    var superhero: Superhero!
-    
+
     // MARK: Private properties
+    private var superhero: Superhero
     private lazy var imageView: UIImageView = .getImageView()
-    private lazy var backButton: UIButton = .getButton(with: #selector(closeVC))
+    private lazy var backButton: UIButton = .getButton(with: #selector(popToPreviousVC))
     private lazy var segmentedControl: UISegmentedControl = makeSegmentedControl()
     private lazy var superheroInfo = SuperheroInfo(superhero: superhero)
+    
+    // MARK: Init
+    init(superhero: Superhero) {
+        self.superhero = superhero
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Life cycle
     override func viewDidLoad() {
@@ -47,24 +55,6 @@ private extension SuperHeroDetailsViewController {
         navigationItem.hidesBackButton = true
     }
     
-    @objc
-    func closeVC() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc
-    func segmentChange(_ segmentedControl: UISegmentedControl) {
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            showStackView(superheroInfo.biographyStackView)
-        case 1:
-            showStackView(superheroInfo.appearanceStackView)
-            
-        default:
-            showStackView(superheroInfo.powerStatsStackView)
-        }
-    }
-    
     func showStackView(_ stackView: UIStackView) {
         [superheroInfo.powerStatsStackView,
          superheroInfo.appearanceStackView,
@@ -83,15 +73,36 @@ private extension SuperHeroDetailsViewController {
     }
 }
 
+// MARK: - Selectors
+private extension SuperHeroDetailsViewController {
+    
+    @objc
+    func popToPreviousVC() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    func segmentDidTap(_ segmentedControl: UISegmentedControl) {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            showStackView(superheroInfo.biographyStackView)
+        case 1:
+            showStackView(superheroInfo.appearanceStackView)
+        default:
+            showStackView(superheroInfo.powerStatsStackView)
+        }
+    }
+}
+
 // MARK: - Create UI element
 private extension SuperHeroDetailsViewController {
     func makeSegmentedControl() -> UISegmentedControl {
         let items = ["Biography", "Appearance", "Powerstats"]
-        let sc = UISegmentedControl(items: items)
-        sc.backgroundColor = .red
-        sc.selectedSegmentTintColor = .yellow
-        sc.addTarget(self, action: #selector(segmentChange), for: .valueChanged)
-        return sc
+        let segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.backgroundColor = .red
+        segmentedControl.selectedSegmentTintColor = .yellow
+        segmentedControl.addTarget(self, action: #selector(segmentDidTap), for: .valueChanged)
+        return segmentedControl
     }
 }
 

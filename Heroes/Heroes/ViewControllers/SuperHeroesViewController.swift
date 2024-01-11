@@ -65,7 +65,6 @@ private extension SuperHeroesViewController {
             .foregroundColor: UIColor.red
         ]
         navBarAppearance.backgroundColor = .black
-    
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
     }
@@ -166,13 +165,12 @@ extension SuperHeroesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let superhero = !isFiltering ? superheroes[indexPath.item] : filteredHeroes[indexPath.item]
-        let detailVC = SuperHeroDetailsViewController()
-        detailVC.superhero = superhero
+        let detailVC = SuperHeroDetailsViewController(superhero: superhero)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
-// MARK: - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegateFlowLayout
 extension SuperHeroesViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
