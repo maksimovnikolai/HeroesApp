@@ -23,11 +23,13 @@ CollectionView - отображение загруженных из сети д�
  можно прочитать краткую биографию, описание внешности, показатели силы
 
 Информация о супергерое "Batman"
- <img src="images/batmanBiography.png" width="200" height="400">  <img src="images/batmanAppearance.png" width="200" height="400">  <img src="images/batmanPowerstats.png" width="200" height="400">  
+
+ <img src="images/batmanBiography.png" width="200" height="400"> <img src="images/batmanAppearance.png" width="200" height="400"> <img src="images/batmanPowerstats.png" width="200" height="400">  
 
 
 Информация о супергерое "Yoda"
- <img src="images/yodaBiography.png" width="200" height="400">  <img src="images/yodaAppearance.png" width="200" height="400">  <img src="images/yodaPowerstats.png" width="200" height="400">  
+
+ <img src="images/yodaBiography.png" width="200" height="400"> <img src="images/yodaAppearance.png" width="200" height="400"> <img src="images/yodaPowerstats.png" width="200" height="400">  
 
 Gif:
  <img src="images/superheroes.gif" width="200" height="400">
